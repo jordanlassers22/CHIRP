@@ -13,7 +13,7 @@ Reference Code: https://github.com/biplob004/Motion-detection-cv2
 
 #Constants for motion detection sensitivity and persistence
 FRAME_UPDATE_INTERVAL = 10  #Number of frames before updating the reference frame
-MINIMUM_MOTION_AREA = 5000  #Minimum contour area to be considered motion
+MINIMUM_MOTION_AREA = 4000  #Minimum contour area to be considered motion
 MOTION_PERSISTENCE_DURATION = 100  #Number of frames to persist motion before stopping recording / resetting to no motion detected state
 
 #Ensure recordings directory exists
@@ -185,7 +185,7 @@ def motion_detection_loop():
                 recording = not recording
                 print(f"Recording set to: {recording}")
     
-    finally:  #Ensures cleanup happends
+    finally:  #Ensures cleanup happens
         print("Releasing video capture...")
         video_capture.release()
         if video_writer:
