@@ -29,4 +29,4 @@ class alert:
 
 if __name__ == "__main__":
     sms_alert = alert()
-    sms_alert.alert("Hello", "This is test", "csvaughan14@gmail.com")
+    sms_alert.alert("Hello", "This is test", "example@example.com")
