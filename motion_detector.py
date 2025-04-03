@@ -39,7 +39,7 @@ class MotionDetector:
     MINIMUM_MOTION_AREA = 4000  #Minimum contour area to be considered motion
     MOTION_PERSISTENCE_DURATION = 100  #Number of frames to persist motion before stopping recording
 
-    def __init__(self, source=0):
+    def __init__(self, source=0, stand=None):
         """
         Initialize the MotionDetector with a video source.
 
@@ -48,7 +48,7 @@ class MotionDetector:
         """
         #Ensure recordings directory exists, won't raise error if it already exists
         os.makedirs('./recordings', exist_ok=True)
-        
+        self.stand = stand
         self.video_capture = self.initialize_video_capture(source)  #Set up video capture
         self.reference_frame = None  #Initial reference frame for motion detection
         self.motion_persistence_counter = 0  #Counter for motion persistence duration
@@ -130,6 +130,22 @@ class MotionDetector:
                     print("CAPTURE ERROR: Could not read frame")
                     continue
 
+                 # Skip processing while rotating
+                if self.stand and self.stand.isRotating:
+                    print("Skipping motion detection — camera is rotating")
+                    _, frame_resized = self.process_frame(frame)
+                    cv2.putText(frame_resized, "Rotating - Motion Detection Paused", (10, 35), self.font_style, 0.75, (0, 255, 255), 2, cv2.LINE_AA)
+                    cv2.imshow("Motion Detection", frame_resized)
+                    key = cv2.waitKey(1) & 0xFF
+                    if key == ord('q'):
+                        if self.video_writer:
+                            self.video_writer.release()
+                        break
+                    elif key == ord('r'):
+                        self.recording = not self.recording
+                        print(f"Recording set to: {self.recording}")
+                    continue
+                
                 current_frame, processed_frame = self.process_frame(frame)  #Process the frame
 
                 #Set initial reference frame if not yet defined
@@ -158,6 +174,14 @@ class MotionDetector:
                 #Reset persistence counter on motion detection
                 if motion_detected:
                     self.motion_persistence_counter = self.MOTION_PERSISTENCE_DURATION
+                    
+                # Pause or resume rotating stand based on motion
+                if self.stand:
+                    if self.motion_persistence_counter > 0:
+                        self.stand.pause_rotation()
+                    else:
+                        self.stand.resume_rotation()
+
 
                 #Update status text based on motion and recording state
                 if self.motion_persistence_counter > 0:
