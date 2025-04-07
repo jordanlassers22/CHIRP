@@ -1,5 +1,6 @@
 import threading
 from time import sleep
+
 class RotatingStand:
     
     def __init__(self, pin=18):
@@ -7,7 +8,7 @@ class RotatingStand:
         self.angle = 0
         self.direction = 1  # 1 = clockwise, -1 = counterclockwise
         self.running = True
-        self.rotation_paused = False # Pause rotation
+        self.rotation_paused = False  # Pause rotation when motion is detected
 
         # Start rotation in a background thread
         self.thread = threading.Thread(target=self.rotate_loop)
@@ -24,7 +25,7 @@ class RotatingStand:
     def rotate_loop(self):
         while self.running:
             if self.rotation_paused:
-                sleep(1)  # wait briefly and check again
+                sleep(1)  # Wait and check again if rotation is paused
                 continue
             # Update angle
             self.angle += 15 * self.direction
@@ -41,10 +42,13 @@ class RotatingStand:
             sleep(3)  # Wait between rotations
 
     def pause_rotation(self):
+        """Pauses rotation when motion is detected."""
         self.rotation_paused = True
 
     def resume_rotation(self):
+        """Resumes rotation when no motion is detected."""
         self.rotation_paused = False
 
     def stop(self):
+        """Stops the rotation thread."""
         self.running = False
