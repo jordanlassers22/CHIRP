@@ -9,6 +9,7 @@ class RotatingStand:
         self.direction = 1  # 1 = clockwise, -1 = counterclockwise
         self.running = True
         self.rotation_paused = False  # Pause rotation when motion is detected
+        self.time_between_rotations = 10 # Time device rests before rotating
 
         # Start rotation in a background thread
         self.thread = threading.Thread(target=self.rotate_loop)
@@ -39,7 +40,7 @@ class RotatingStand:
                 self.direction = 1
 
             self.setAngle(self.angle)
-            sleep(3)  # Wait between rotations
+            sleep(self.time_between_rotations)  # Wait between rotations
 
     def pause_rotation(self):
         """Pauses rotation when motion is detected."""

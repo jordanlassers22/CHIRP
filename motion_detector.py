@@ -33,7 +33,7 @@ class MotionDetector:
     # Class-level constants for motion detection sensitivity and persistence
     FRAME_UPDATE_INTERVAL = 10  # Number of frames before updating the reference frame
     MINIMUM_MOTION_AREA = 1000  # Minimum contour area to be considered motion
-    MOTION_PERSISTENCE_DURATION = 100  # Number of frames to persist motion before stopping recording
+    MOTION_PERSISTENCE_DURATION = 50  # Number of frames to persist motion before stopping recording
 
     def __init__(self, stand=None):
         """
@@ -134,6 +134,10 @@ class MotionDetector:
                     motion_status_text = f"Motion Detected ({self.motion_persistence_counter}) - Recording: {self.recording}"
                 else:
                     motion_status_text = f"No Motion Detected - Recording: {self.recording}"
+                
+                if self.stand and self.stand.isRotating:
+                    cv2.putText(processed_frame, "Rotating - Motion detection paused", (10, 70), self.font_style, 0.75, (0, 255, 255), 2, cv2.LINE_AA)
+
 
                 # Decrease persistence counter, ensuring it doesn't go below 0
                 self.motion_persistence_counter = max(0, self.motion_persistence_counter - 1)
