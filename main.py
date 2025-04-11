@@ -1,4 +1,4 @@
-from motion_detector import MotionDetector
+from MotionDetector import MotionDetector
 from alert_system import alert
 from RotatingBase import RotatingStand
 # Play light and sound when motion detected

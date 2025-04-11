@@ -1,9 +1,13 @@
 import threading
 from time import sleep
+from MotorController import MotorController
 
 class RotatingStand:
     
     def __init__(self, pin=18):
+
+        self.ROTATION_DELAY = 100
+        self.motorController = MotorController()
         self.isRotating = False
         self.angle = 0
         self.direction = 1  # 1 = clockwise, -1 = counterclockwise
@@ -20,7 +24,7 @@ class RotatingStand:
         self.isRotating = True
         self.angle = angle
         print(f"Rotating to {self.angle}°")
-        sleep(4)  # Simulate time to rotate
+        self.motorController.rotate_degrees(self.angle, self.ROTATION_DELAY)
         self.isRotating = False
 
     def rotate_loop(self):

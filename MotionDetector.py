@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import time
 import os
+from Deterent import Alarm
 
 """
 SUMMARY:
@@ -117,6 +118,7 @@ class MotionDetector:
                 if motion_detected and not self.announced_detected_motion:
                     self.announced_detected_motion = True
                     print("New Motion Detected")
+                    Alarm().soundAlarm()
 
                 # Reset persistence counter on motion detection
                 if motion_detected:
