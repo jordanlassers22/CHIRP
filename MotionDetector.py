@@ -9,6 +9,7 @@ from Deterent import Alarm
 SUMMARY:
 This script captures video from a webcam (or other source), detects motion by comparing the difference 
 between frames, and records a video when motion is detected AND a recording flag is set to True.
+Reference Code: https://github.com/biplob004/Motion-detection-cv2
 """
 
 class MotionDetector:
