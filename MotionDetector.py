@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import time
 import os
-from Deterent import Alarm
+from alert_system import Alarm
 
 """
 SUMMARY:
@@ -46,6 +46,7 @@ class MotionDetector:
         # Ensure recordings directory exists, won't raise error if it already exists
         os.makedirs('./recordings', exist_ok=True)
         self.stand = stand
+        self.alarm = Alarm()
         
         # Initialize Picamera2 for capturing frames
         self.picam2 = Picamera2()
@@ -119,8 +120,7 @@ class MotionDetector:
                 if motion_detected and not self.announced_detected_motion:
                     self.announced_detected_motion = True
                     print("New Motion Detected")
-                    Alarm().soundAlarm()
-
+                    self.alarm.sound_for(duration=2, repeats=1)
                 # Reset persistence counter on motion detection
                 if motion_detected:
                     self.motion_persistence_counter = self.MOTION_PERSISTENCE_DURATION
