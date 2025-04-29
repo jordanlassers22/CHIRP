@@ -1,9 +1,16 @@
+import os
+import sys
+os.environ["OPENCV_VIDEOIO_PRIORITY_MSMF"] = "0" 
+os.environ["QT_QPA_PLATFORM"] = "offscreen"       
+
 from picamera2 import Picamera2
 import cv2
 import numpy as np
 import time
-import os
 from alert_system import Alarm
+
+HEADLESS = not os.environ.get("DISPLAY")
+
 
 """
 SUMMARY:
@@ -127,25 +134,31 @@ class MotionDetector:
                 
                 #Pause rotation when movement is detected
                 if self.sentry:
-                    if self.motion_persistence_counter > 0:
-                        self.sentry.pause_rotation()  # Pause rotation when motion is detected
-                    else:
-                        self.sentry.resume_rotation()  # Resume rotation when no motion is detected
+                    if self.motion_persistence_counter > 0 and not self.sentry._pause_event.is_set():
+                        self.sentry.pause_rotation()
+                    elif self.motion_persistence_counter == 0 and self.sentry._pause_event.is_set():
+                        self.sentry.resume_rotation()
+
 
                 # Update status text based on motion and recording state
-                if self.motion_persistence_counter > 0:
-                    motion_status_text = f"Motion Detected ({self.motion_persistence_counter}) - Recording: {self.recording}"
-                else:
-                    motion_status_text = f"No Motion Detected - Recording: {self.recording}"
-                
-                if self.sentry and self.sentry.isRotating:
-                    cv2.putText(processed_frame, "Rotating - Motion detection paused", (10, 70), self.font_style, 0.75, (0, 255, 255), 2, cv2.LINE_AA)
-
-
                 # Decrease persistence counter, ensuring it doesn't go below 0
                 self.motion_persistence_counter = max(0, self.motion_persistence_counter - 1)
-                cv2.putText(processed_frame, motion_status_text, (10, 35), self.font_style, 0.75, (255, 255, 255), 2, cv2.LINE_AA)  # Overlay text
-                cv2.imshow("Motion Detection", processed_frame)  # Display the frame
+
+                if not HEADLESS:
+                    # Update status text based on motion and recording state
+                    if self.motion_persistence_counter > 0:
+                        motion_status_text = f"Motion Detected ({self.motion_persistence_counter}) - Recording: {self.recording}"
+                    else:
+                        motion_status_text = f"No Motion Detected - Recording: {self.recording}"
+
+                    cv2.putText(processed_frame, motion_status_text, (10, 35), self.font_style, 0.75, (255, 255, 255), 2, cv2.LINE_AA)
+
+                    if self.sentry and self.sentry.isRotating:
+                        cv2.putText(processed_frame, "Rotating - Motion detection paused", (10, 70), self.font_style, 0.75, (0, 255, 255), 2, cv2.LINE_AA)
+
+                    cv2.imshow("Motion Detection", processed_frame)
+
+
 
                 # Initialize video writer if motion persists and recording is enabled
                 if self.motion_persistence_counter > 0 and not self.video_writer and self.recording:
@@ -167,25 +180,34 @@ class MotionDetector:
                     self.announced_detected_motion = False
 
                 # Handle user input
-                key = cv2.waitKey(1) & 0xFF
-                if key == ord('q'):  # Exit on 'q'
-                    if self.video_writer:
-                        self.video_writer.release()
-                    break
-                elif key == ord('r'):  # Toggle recording on 'r'
-                    self.recording = not self.recording
-                    print(f"Recording set to: {self.recording}")
+                if not HEADLESS:
+                    key = cv2.waitKey(1) & 0xFF
+                    if key == ord('q'):
+                        if self.video_writer:
+                            self.video_writer.release()
+                        break
+                    elif key == ord('r'):
+                        self.recording = not self.recording
+                        print(f"Recording set to: {self.recording}")
+                else:
+                    time.sleep(0.05)  # prevent 100% CPU usage
+
 
         finally:
-            # Clean up resources on exit
             print("Releasing video capture...")
             self.picam2.stop()
+
             if self.video_writer:
                 print("Releasing video writer...")
                 self.video_writer.release()
-            print("Closing all windows...")
-            cv2.destroyAllWindows()
+                self.video_writer = None  # <-- add this for safety
+
+            if not HEADLESS:
+                print("Closing all windows...")
+                cv2.destroyAllWindows()
+
             print("Cleanup complete.")
+
 
 if __name__ == "__main__":
     """Entry point: Create a MotionDetector instance and run it."""

@@ -30,7 +30,7 @@ class Sentry:
         self._rotation_thread.start()
 
     def _rotate_loop(self):
-            direction = 'right'
+            direction = 'left'
             rotation_count = 0
 
             while not self._stop_event.is_set():
@@ -38,7 +38,7 @@ class Sentry:
                     self.isRotating = True
 
                     # Set motor direction
-                    if direction == 'right':
+                    if direction == 'left':
                         GPIO.output(self.right_pin, GPIO.HIGH)
                         GPIO.output(self.left_pin, GPIO.LOW)
                     else:
@@ -60,7 +60,7 @@ class Sentry:
 
                     # Switch direction after specified number of rotations
                     if rotation_count >= self.rotations_before_switch:
-                        direction = 'left' if direction == 'right' else 'right'
+                        direction = 'right' if direction == 'left' else 'left'
                         rotation_count = 0
                         print(f"Switching direction to {direction}")
 
