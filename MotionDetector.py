@@ -37,15 +37,15 @@ class MotionDetector:
     MINIMUM_MOTION_AREA = 1000  # Minimum contour area to be considered motion
     MOTION_PERSISTENCE_DURATION = 50  # Number of frames to persist motion before stopping recording
 
-    def __init__(self, stand=None):
+    def __init__(self, sentry=None):
         """
         Initialize the MotionDetector with a video source.
         Args:
-            stand (optional): The rotating stand object, if present. Defaults to None.
+            sentry (optional): The rotating sentry object, if present. Defaults to None.
         """
         # Ensure recordings directory exists, won't raise error if it already exists
         os.makedirs('./recordings', exist_ok=True)
-        self.stand = stand
+        self.sentry = sentry
         self.alarm = Alarm()
         
         # Initialize Picamera2 for capturing frames
@@ -120,17 +120,17 @@ class MotionDetector:
                 if motion_detected and not self.announced_detected_motion:
                     self.announced_detected_motion = True
                     print("New Motion Detected")
-                    self.alarm.sound_for(duration=2, repeats=1)
+                    #self.alarm.sound_for(duration=2, repeats=1)
                 # Reset persistence counter on motion detection
                 if motion_detected:
                     self.motion_persistence_counter = self.MOTION_PERSISTENCE_DURATION
                 
                 #Pause rotation when movement is detected
-                if self.stand:
+                if self.sentry:
                     if self.motion_persistence_counter > 0:
-                        self.stand.pause_rotation()  # Pause rotation when motion is detected
+                        self.sentry.pause_rotation()  # Pause rotation when motion is detected
                     else:
-                        self.stand.resume_rotation()  # Resume rotation when no motion is detected
+                        self.sentry.resume_rotation()  # Resume rotation when no motion is detected
 
                 # Update status text based on motion and recording state
                 if self.motion_persistence_counter > 0:
@@ -138,7 +138,7 @@ class MotionDetector:
                 else:
                     motion_status_text = f"No Motion Detected - Recording: {self.recording}"
                 
-                if self.stand and self.stand.isRotating:
+                if self.sentry and self.sentry.isRotating:
                     cv2.putText(processed_frame, "Rotating - Motion detection paused", (10, 70), self.font_style, 0.75, (0, 255, 255), 2, cv2.LINE_AA)
 
 

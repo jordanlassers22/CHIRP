@@ -96,7 +96,7 @@ class Sentry:
 if __name__ == "__main__":
     try:
         # Create the sentry stand 
-        stand = Sentry(left_pin=1, right_pin=7, wait_duration=4, rotations_before_switch=3)
+        stand = Sentry(left_pin=1, right_pin=7, wait_duration=3, rotations_before_switch=8,rotate_duration=.15)
 
         print("Sentry stand is running. Press CTRL+C to stop.")
         while True:
