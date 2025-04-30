@@ -12,7 +12,7 @@ Welcome to the **CHIRP Surveillance System**! This guide will walk you through i
 - PiCamera 2 module
 - Buzzer/siren (GPIO-compatible)
 - DC motor connected to GPIO pins (for turret rotation)
-- Wiring as shown in the wiring diagram (`circuit.JPEG`)
+- Wiring as shown in the wiring diagram ![Wiring Diagram](circuit.JPEG)
 
 ### Software
 
