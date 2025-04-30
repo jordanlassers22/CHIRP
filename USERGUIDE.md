@@ -70,6 +70,7 @@ This will:
 
 ## Keyboard Controls
 r	Toggle recording mode
+
 q	Quit the program
 
 Recordings are saved to the recordings/ directory.
@@ -98,7 +99,7 @@ Issue	Solution
 | Issue                   | Solution                                                                 |
 |-------------------------|--------------------------------------------------------------------------|
 | *** no cameras available *** | Check ribbon cable, enable camera in raspi-config                    |
-| libcamera-hello fails   | Run `sudo modprobe bcm2835-v4l2`, then retry                             |
+| libcamera-hello fails   | Check ribbon cable, enable camera in raspi-config                           |
 | Alarm silent            | Verify GPIO pin (16 by default) and active-high/low logic               |
 | Motors unresponsive     | Check pin assignments and power delivery                                |
 | Script exits instantly  | Confirm camera is detected and run from an interactive shell            |
