@@ -2,11 +2,19 @@ import RPi.GPIO as GPIO
 import time
 
 class Alarm:
+    """
+        A class to manage a GPIO-controlled alarm such as a buzzer or siren.
+        Attributes:
+            pin (int): The GPIO pin number to which the alarm is connected (BCM mode).
+            active_state (int): GPIO.HIGH or GPIO.LOW depending on wiring (active-high or active-low).
+            inactive_state (int): Opposite of active_state to turn off the alarm.
+        """
     def __init__(self, pin=16, active_high=True):
         """
         Initialize the alarm on a given GPIO pin.
-        :param pin: GPIO pin number (BCM mode)
-        :param active_high: True if alarm is activated by HIGH signal, False for active-low
+        Args:
+            pin (int): The GPIO pin number using BCM numbering.
+            active_high (bool): If True, GPIO.HIGH activates the alarm (default). Use False for active-low alarms.
         """
         self.pin = pin
         self.active_state = GPIO.HIGH if active_high else GPIO.LOW
@@ -18,6 +26,12 @@ class Alarm:
         GPIO.output(self.pin, self.inactive_state)
 
     def sound_for(self, duration=2, repeats=1):
+        """
+        Activate the alarm for a specified duration and number of repeats.
+        Args:
+            duration (float): Time in seconds the alarm should stay on per cycle.
+            repeats (int): Number of times to repeat the alarm cycle.
+        """
             for _ in range(repeats):
                 print(f"Alarm ON for {duration} seconds")
                 GPIO.output(self.pin, self.active_state)
@@ -29,7 +43,7 @@ class Alarm:
 
     def cleanup(self):
         """
-        Clean up GPIO settings (optional call at program end)
+        Clean up GPIO settings. Should be called at the end of your program to safely release GPIO pins.
         """
         GPIO.cleanup()
 
