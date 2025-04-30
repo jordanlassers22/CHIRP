@@ -10,7 +10,6 @@ It uses a camera to detect motion, sounds an alarm when intruders are detected, 
 -  **Motion Detection:** Detects movement using Picamera2 and OpenCV.
 -  **Alarm System:** Sounds an alarm immediately when motion is detected.
 -  **Sentry Mode:** Automatically pans the camera up to 359° and reverses direction .
--  **Email Notifications:** Sends an email when motion is detected.
 -  **Video Recording:** Saves video files of detected motion events.
 
 
