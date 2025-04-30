@@ -3,13 +3,28 @@ import threading
 import time
 
 class Sentry:
+      """
+        A class to manage a rotating sentry turret using GPIO pins on a Raspberry Pi.
+        The turret alternates between left and right rotations after a set number of cycles.
+        It can be paused/resumed and runs on a background thread.
+        Attributes:
+            left_pin (int): GPIO pin used to rotate the turret left.
+            right_pin (int): GPIO pin used to rotate the turret right.
+            rotate_duration (float): Duration in seconds to rotate in one cycle.
+            wait_duration (float): Time in seconds to wait between each rotation.
+            rotations_before_switch (int): Number of cycles before changing direction.
+            isRotating (bool): Flag indicating if the sentry is actively rotating.
+        """
     def __init__(self, left_pin=1, right_pin=7, rotate_duration=1, wait_duration=10, rotations_before_switch=5):
         """
-        :param left_pin: GPIO pin number to rotate left
-        :param right_pin: GPIO pin number to rotate right
-        :param rotate_duration: Time in seconds to rotate each cycle
-        :param wait_duration: Time in seconds to wait between rotations
-        :param rotations_before_switch: Number of rotations before changing direction
+        Initialize the Sentry system with the specified GPIO pins and timing configuration.
+    
+        Args:
+            left_pin (int): GPIO pin for rotating left (default: 1).
+            right_pin (int): GPIO pin for rotating right (default: 7).
+            rotate_duration (float): Duration of each rotation movement (in seconds).
+            wait_duration (float): Time to wait between each rotation (in seconds).
+            rotations_before_switch (int): Number of rotations before switching direction.
         """
         self.left_pin = left_pin
         self.right_pin = right_pin
@@ -30,6 +45,11 @@ class Sentry:
         self._rotation_thread.start()
 
     def _rotate_loop(self):
+        """
+        Background thread that handles rotation logic.
+        Alternates between rotating left and right based on a cycle count.
+        Rotation is paused if `_pause_event` is set and stopped if `_stop_event` is triggered.
+        """
             direction = 'left'
             rotation_count = 0
 
@@ -68,24 +88,32 @@ class Sentry:
 
 
     def pause_rotation(self):
-        """Pause the stand rotation."""
+        """
+        Pause the turret's rotation. Useful when motion is detected.
+        """
         print("Rotation paused")
         self._pause_event.set()
 
     def resume_rotation(self):
-        """Resume the stand rotation."""
+        """
+        Resume turret rotation after being paused.
+        """
         print("Rotation resumed")
         self._pause_event.clear()
 
     def stop(self):
-        """Stop rotation and clean up GPIO."""
+        """
+        Stop the sentry and clean up all GPIO resources.
+        Waits for the background rotation thread to finish.
+        """
         self._stop_event.set()
         self._rotation_thread.join()
         GPIO.cleanup()
         
     def __del__(self):
         """
-        Destructor: Make sure GPIO is cleaned up if the object is deleted.
+        Destructor to ensure GPIO is cleaned up if the Sentry object is destroyed.
+        This provides a safety net in case the `stop()` method wasn't called.
         """
         print("Destructor called, cleaning up GPIO...")
         try:
