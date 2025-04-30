@@ -1,0 +1,106 @@
+\doxysection{sentry\+Turret.\+Sentry Class Reference}
+\hypertarget{classsentry_turret_1_1_sentry}{}\label{classsentry_turret_1_1_sentry}\index{sentryTurret.Sentry@{sentryTurret.Sentry}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classsentry_turret_1_1_sentry_ab66d999a66dca7c2e283b049b57a5f8b}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, left\+\_\+pin=1, right\+\_\+pin=7, rotate\+\_\+duration=1, wait\+\_\+duration=10, rotations\+\_\+before\+\_\+switch=5)
+\item 
+\mbox{\hyperlink{classsentry_turret_1_1_sentry_a7a6422237b5dd3c9e2addad33df196ce}{pause\+\_\+rotation}} (self)
+\item 
+\mbox{\hyperlink{classsentry_turret_1_1_sentry_a6a26618de905b9f893a43f2af6eed027}{resume\+\_\+rotation}} (self)
+\item 
+\mbox{\hyperlink{classsentry_turret_1_1_sentry_ac9a6114c1957244fc8b521bccf7ab839}{stop}} (self)
+\item 
+\mbox{\hyperlink{classsentry_turret_1_1_sentry_a09b3e63900ae83dba54070e9e8e67770}{\+\_\+\+\_\+del\+\_\+\+\_\+}} (self)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_a12b4493240d3a1fc51b3dbc340b4b01b}\label{classsentry_turret_1_1_sentry_a12b4493240d3a1fc51b3dbc340b4b01b} 
+{\bfseries left\+\_\+pin} = left\+\_\+pin
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_ac0b43b356da2f1c7f2f1a832ee486651}\label{classsentry_turret_1_1_sentry_ac0b43b356da2f1c7f2f1a832ee486651} 
+{\bfseries right\+\_\+pin} = right\+\_\+pin
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_af815f024ad1a523adad49872dd0f6372}\label{classsentry_turret_1_1_sentry_af815f024ad1a523adad49872dd0f6372} 
+{\bfseries rotate\+\_\+duration} = rotate\+\_\+duration
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_aa16241d5a3e8baa6e48e75ecfb1d43f9}\label{classsentry_turret_1_1_sentry_aa16241d5a3e8baa6e48e75ecfb1d43f9} 
+{\bfseries wait\+\_\+duration} = wait\+\_\+duration
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_a32e5bb92b14e1a173f0825e259e13282}\label{classsentry_turret_1_1_sentry_a32e5bb92b14e1a173f0825e259e13282} 
+{\bfseries rotations\+\_\+before\+\_\+switch} = rotations\+\_\+before\+\_\+switch
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_aa9b19f0aa56a8b9d7337cab4c2cd620c}\label{classsentry_turret_1_1_sentry_aa9b19f0aa56a8b9d7337cab4c2cd620c} 
+bool {\bfseries is\+Rotating} = False
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_aa887d64634f26353d895616e869edf18}\label{classsentry_turret_1_1_sentry_aa887d64634f26353d895616e869edf18} 
+{\bfseries \+\_\+rotate\+\_\+loop} (self)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_aeb65a140763c320ed38ae75f3bd6d24f}\label{classsentry_turret_1_1_sentry_aeb65a140763c320ed38ae75f3bd6d24f} 
+{\bfseries \+\_\+stop\+\_\+event} = threading.\+Event()
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_a7a009fa7f4fadc6215741f98b194f4b7}\label{classsentry_turret_1_1_sentry_a7a009fa7f4fadc6215741f98b194f4b7} 
+{\bfseries \+\_\+pause\+\_\+event} = threading.\+Event()
+\item 
+\Hypertarget{classsentry_turret_1_1_sentry_ab713a6b86845a9a467d9c6a2448df050}\label{classsentry_turret_1_1_sentry_ab713a6b86845a9a467d9c6a2448df050} 
+{\bfseries \+\_\+rotation\+\_\+thread} = threading.\+Thread(target=self.\+\_\+rotate\+\_\+loop)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classsentry_turret_1_1_sentry_ab66d999a66dca7c2e283b049b57a5f8b}\index{sentryTurret.Sentry@{sentryTurret.Sentry}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!sentryTurret.Sentry@{sentryTurret.Sentry}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily \label{classsentry_turret_1_1_sentry_ab66d999a66dca7c2e283b049b57a5f8b} 
+sentry\+Turret.\+Sentry.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{left\+\_\+pin}{ = {\ttfamily 1}, }\item[{}]{right\+\_\+pin}{ = {\ttfamily 7}, }\item[{}]{rotate\+\_\+duration}{ = {\ttfamily 1}, }\item[{}]{wait\+\_\+duration}{ = {\ttfamily 10}, }\item[{}]{rotations\+\_\+before\+\_\+switch}{ = {\ttfamily 5}}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}:param left_pin: GPIO pin number to rotate left
+:param right_pin: GPIO pin number to rotate right
+:param rotate_duration: Time in seconds to rotate each cycle
+:param wait_duration: Time in seconds to wait between rotations
+:param rotations_before_switch: Number of rotations before changing direction
+\end{DoxyVerb}
+ \Hypertarget{classsentry_turret_1_1_sentry_a09b3e63900ae83dba54070e9e8e67770}\index{sentryTurret.Sentry@{sentryTurret.Sentry}!\_\_del\_\_@{\_\_del\_\_}}
+\index{\_\_del\_\_@{\_\_del\_\_}!sentryTurret.Sentry@{sentryTurret.Sentry}}
+\doxysubsubsection{\texorpdfstring{\_\_del\_\_()}{\_\_del\_\_()}}
+{\footnotesize\ttfamily \label{classsentry_turret_1_1_sentry_a09b3e63900ae83dba54070e9e8e67770} 
+sentry\+Turret.\+Sentry.\+\_\+\+\_\+del\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Destructor: Make sure GPIO is cleaned up if the object is deleted.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classsentry_turret_1_1_sentry_a7a6422237b5dd3c9e2addad33df196ce}\index{sentryTurret.Sentry@{sentryTurret.Sentry}!pause\_rotation@{pause\_rotation}}
+\index{pause\_rotation@{pause\_rotation}!sentryTurret.Sentry@{sentryTurret.Sentry}}
+\doxysubsubsection{\texorpdfstring{pause\_rotation()}{pause\_rotation()}}
+{\footnotesize\ttfamily \label{classsentry_turret_1_1_sentry_a7a6422237b5dd3c9e2addad33df196ce} 
+sentry\+Turret.\+Sentry.\+pause\+\_\+rotation (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Pause the stand rotation.\end{DoxyVerb}
+ \Hypertarget{classsentry_turret_1_1_sentry_a6a26618de905b9f893a43f2af6eed027}\index{sentryTurret.Sentry@{sentryTurret.Sentry}!resume\_rotation@{resume\_rotation}}
+\index{resume\_rotation@{resume\_rotation}!sentryTurret.Sentry@{sentryTurret.Sentry}}
+\doxysubsubsection{\texorpdfstring{resume\_rotation()}{resume\_rotation()}}
+{\footnotesize\ttfamily \label{classsentry_turret_1_1_sentry_a6a26618de905b9f893a43f2af6eed027} 
+sentry\+Turret.\+Sentry.\+resume\+\_\+rotation (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Resume the stand rotation.\end{DoxyVerb}
+ \Hypertarget{classsentry_turret_1_1_sentry_ac9a6114c1957244fc8b521bccf7ab839}\index{sentryTurret.Sentry@{sentryTurret.Sentry}!stop@{stop}}
+\index{stop@{stop}!sentryTurret.Sentry@{sentryTurret.Sentry}}
+\doxysubsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily \label{classsentry_turret_1_1_sentry_ac9a6114c1957244fc8b521bccf7ab839} 
+sentry\+Turret.\+Sentry.\+stop (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Stop rotation and clean up GPIO.\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+sentry\+Turret.\+py\end{DoxyCompactItemize}

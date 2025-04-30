@@ -32,13 +32,13 @@ class Alarm:
             duration (float): Time in seconds the alarm should stay on per cycle.
             repeats (int): Number of times to repeat the alarm cycle.
         """
-            for _ in range(repeats):
-                print(f"Alarm ON for {duration} seconds")
-                GPIO.output(self.pin, self.active_state)
-                time.sleep(duration)
-                GPIO.output(self.pin, self.inactive_state)
-                print("Alarm OFF")
-                time.sleep(1)  # pause
+        for _ in range(repeats):
+            print(f"Alarm ON for {duration} seconds")
+            GPIO.output(self.pin, self.active_state)
+            time.sleep(duration)
+            GPIO.output(self.pin, self.inactive_state)
+            print("Alarm OFF")
+            time.sleep(1)  # pause
 
 
     def cleanup(self):

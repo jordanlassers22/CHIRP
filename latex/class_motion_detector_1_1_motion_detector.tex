@@ -1,0 +1,126 @@
+\doxysection{Motion\+Detector.\+Motion\+Detector Class Reference}
+\hypertarget{class_motion_detector_1_1_motion_detector}{}\label{class_motion_detector_1_1_motion_detector}\index{MotionDetector.MotionDetector@{MotionDetector.MotionDetector}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_motion_detector_1_1_motion_detector_afe9f42925f78c9762b2def23d72ed2fb}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, sentry=None)
+\item 
+\mbox{\hyperlink{class_motion_detector_1_1_motion_detector_a2fa000687c69239dbae99c66cfb6f157}{process\+\_\+frame}} (self, frame)
+\item 
+\mbox{\hyperlink{class_motion_detector_1_1_motion_detector_a4ccea9e19b80bb042e4403b4c42e2f73}{detect\+\_\+motion}} (self, reference\+\_\+frame, current\+\_\+frame)
+\item 
+\mbox{\hyperlink{class_motion_detector_1_1_motion_detector_a5b507315c430cb12dedc7ae9f5dcf03c}{run}} (self)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_ac79e60a899b667c6c048b166ce5e7015}\label{class_motion_detector_1_1_motion_detector_ac79e60a899b667c6c048b166ce5e7015} 
+{\bfseries sentry} = sentry
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_a74b25d764742477bb9dde4132981c1f6}\label{class_motion_detector_1_1_motion_detector_a74b25d764742477bb9dde4132981c1f6} 
+{\bfseries alarm} = \mbox{\hyperlink{classalert__system_1_1_alarm}{Alarm}}()
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_a042feb476bc9f9a35fba0566bb522e32}\label{class_motion_detector_1_1_motion_detector_a042feb476bc9f9a35fba0566bb522e32} 
+{\bfseries picam2} = Picamera2()
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_accdb0b7a81ef8df4d029b1d0da6fba7e}\label{class_motion_detector_1_1_motion_detector_accdb0b7a81ef8df4d029b1d0da6fba7e} 
+{\bfseries reference\+\_\+frame} = None
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_a7db6465f238a7193e84e17b511a879a6}\label{class_motion_detector_1_1_motion_detector_a7db6465f238a7193e84e17b511a879a6} 
+int {\bfseries motion\+\_\+persistence\+\_\+counter} = 0
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_abfabc29c6e4b15a0f22f7b5c7a7ad7f4}\label{class_motion_detector_1_1_motion_detector_abfabc29c6e4b15a0f22f7b5c7a7ad7f4} 
+int {\bfseries frame\+\_\+update\+\_\+counter} = 0
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_a0db5da4aed6b75317fa7f024fc6155e1}\label{class_motion_detector_1_1_motion_detector_a0db5da4aed6b75317fa7f024fc6155e1} 
+{\bfseries font\+\_\+style} = cv2.\+FONT\+\_\+\+HERSHEY\+\_\+\+SIMPLEX
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_ad74bd64527dbfd4de9019f0382153e3a}\label{class_motion_detector_1_1_motion_detector_ad74bd64527dbfd4de9019f0382153e3a} 
+{\bfseries video\+\_\+writer} = None
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_a9bbc961f2f13c7a0b7609aa638df2cc9}\label{class_motion_detector_1_1_motion_detector_a9bbc961f2f13c7a0b7609aa638df2cc9} 
+{\bfseries video\+\_\+codec} = cv2.\+Video\+Writer\+\_\+fourcc(\texorpdfstring{$\ast$}{*}\textquotesingle{}XVID\textquotesingle{})
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_ab5b2ea18b6d318153d10a7f8e30720b8}\label{class_motion_detector_1_1_motion_detector_ab5b2ea18b6d318153d10a7f8e30720b8} 
+bool {\bfseries recording} = False
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_a219946e62180febd9cf7331e945ab996}\label{class_motion_detector_1_1_motion_detector_a219946e62180febd9cf7331e945ab996} 
+bool {\bfseries announced\+\_\+detected\+\_\+motion} = False
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_a519e455ceeba34cc1ce037bbecd21cfd}\label{class_motion_detector_1_1_motion_detector_a519e455ceeba34cc1ce037bbecd21cfd} 
+int {\bfseries FRAME\+\_\+\+UPDATE\+\_\+\+INTERVAL} = 10
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_ac99adf424746fa58c8bd2ce48efc8c07}\label{class_motion_detector_1_1_motion_detector_ac99adf424746fa58c8bd2ce48efc8c07} 
+int {\bfseries MINIMUM\+\_\+\+MOTION\+\_\+\+AREA} = 1000
+\item 
+\Hypertarget{class_motion_detector_1_1_motion_detector_acd425928dbdf2feda36e15542c633918}\label{class_motion_detector_1_1_motion_detector_acd425928dbdf2feda36e15542c633918} 
+int {\bfseries MOTION\+\_\+\+PERSISTENCE\+\_\+\+DURATION} = 50
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}A class that captures video from a webcam (or other source), detects motion by comparing the difference 
+between frames, and records a video when motion is detected AND a recording flag is set to True.
+
+Attributes:
+    FRAME_UPDATE_INTERVAL (int): Number of frames before updating the reference frame.
+    MINIMUM_MOTION_AREA (int): Minimum contour area to be considered motion.
+    MOTION_PERSISTENCE_DURATION (int): Number of frames to persist motion before stopping recording.
+    video_capture (cv2.VideoCapture): Video capture object for the specified source.
+    reference_frame (numpy.ndarray): Grayscale frame used as baseline for motion detection.
+    motion_persistence_counter (int): Tracks frames remaining for motion persistence.
+    frame_update_counter (int): Tracks frames until reference frame update.
+    font_style (int): OpenCV font style for text overlay.
+    video_writer (cv2.VideoWriter): Object for writing video to file, None if not recording.
+    video_codec (int): FourCC code for video encoding (XVID).
+    recording (bool): Flag to enable/disable video recording.
+    announced_detected_motion (bool): Flag to track if motion detection has been announced.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_motion_detector_1_1_motion_detector_afe9f42925f78c9762b2def23d72ed2fb}\index{MotionDetector.MotionDetector@{MotionDetector.MotionDetector}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!MotionDetector.MotionDetector@{MotionDetector.MotionDetector}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily \label{class_motion_detector_1_1_motion_detector_afe9f42925f78c9762b2def23d72ed2fb} 
+Motion\+Detector.\+Motion\+Detector.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{sentry}{ = {\ttfamily None}}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Initialize the MotionDetector with a video source.
+Args:
+    sentry (optional): The rotating sentry object, if present. Defaults to None.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_motion_detector_1_1_motion_detector_a4ccea9e19b80bb042e4403b4c42e2f73}\index{MotionDetector.MotionDetector@{MotionDetector.MotionDetector}!detect\_motion@{detect\_motion}}
+\index{detect\_motion@{detect\_motion}!MotionDetector.MotionDetector@{MotionDetector.MotionDetector}}
+\doxysubsubsection{\texorpdfstring{detect\_motion()}{detect\_motion()}}
+{\footnotesize\ttfamily \label{class_motion_detector_1_1_motion_detector_a4ccea9e19b80bb042e4403b4c42e2f73} 
+Motion\+Detector.\+Motion\+Detector.\+detect\+\_\+motion (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{reference\+\_\+frame}{, }\item[{}]{current\+\_\+frame}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Detect motion by analyzing differences between a reference frame and the current frame.
+\end{DoxyVerb}
+ \Hypertarget{class_motion_detector_1_1_motion_detector_a2fa000687c69239dbae99c66cfb6f157}\index{MotionDetector.MotionDetector@{MotionDetector.MotionDetector}!process\_frame@{process\_frame}}
+\index{process\_frame@{process\_frame}!MotionDetector.MotionDetector@{MotionDetector.MotionDetector}}
+\doxysubsubsection{\texorpdfstring{process\_frame()}{process\_frame()}}
+{\footnotesize\ttfamily \label{class_motion_detector_1_1_motion_detector_a2fa000687c69239dbae99c66cfb6f157} 
+Motion\+Detector.\+Motion\+Detector.\+process\+\_\+frame (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{frame}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Process a raw video frame for motion detection and display/recording.
+\end{DoxyVerb}
+ \Hypertarget{class_motion_detector_1_1_motion_detector_a5b507315c430cb12dedc7ae9f5dcf03c}\index{MotionDetector.MotionDetector@{MotionDetector.MotionDetector}!run@{run}}
+\index{run@{run}!MotionDetector.MotionDetector@{MotionDetector.MotionDetector}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{class_motion_detector_1_1_motion_detector_a5b507315c430cb12dedc7ae9f5dcf03c} 
+Motion\+Detector.\+Motion\+Detector.\+run (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Run the main loop to capture video, detect motion, and record video when conditions are met.
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Motion\+Detector.\+py\end{DoxyCompactItemize}

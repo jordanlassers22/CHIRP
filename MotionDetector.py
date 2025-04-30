@@ -100,13 +100,13 @@ class MotionDetector:
         return contours
 
     def run(self):
-         """
-        Continuously capture video frames and detect motion.
-            - Detect movement using frame differencing.
-            - Display and annotate the frame using OpenCV (unless in headless mode).
-            - Pause/resume the sentry turret when motion is detected or ends.
-            - Optionally record motion-triggered video clips to disk.
-            - Monitor user input for quit ('q') or toggle recording ('r').
+        """
+    Continuously capture video frames and detect motion.
+    - Detect movement using frame differencing.
+    - Display and annotate the frame using OpenCV (unless in headless mode).
+    - Pause/resume the sentry turret when motion is detected or ends.
+    - Optionally record motion-triggered video clips to disk.
+    - Monitor user input for quit ('q') or toggle recording ('r').
         """
         try:
             while True:
