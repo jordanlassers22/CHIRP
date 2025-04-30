@@ -21,23 +21,22 @@ Reference Code: https://github.com/biplob004/Motion-detection-cv2
 
 class MotionDetector:
     """
-    A class that captures video from a webcam (or other source), detects motion by comparing the difference 
-    between frames, and records a video when motion is detected AND a recording flag is set to True.
+    A class that detects motion using the PiCamera2 module, analyzes video frames for changes, and
+    coordinates actions like pausing rotation, recording footage, and triggering alarms.
 
     Attributes:
-        FRAME_UPDATE_INTERVAL (int): Number of frames before updating the reference frame.
-        MINIMUM_MOTION_AREA (int): Minimum contour area to be considered motion.
-        MOTION_PERSISTENCE_DURATION (int): Number of frames to persist motion before stopping recording.
-        video_capture (cv2.VideoCapture): Video capture object for the specified source.
-        reference_frame (numpy.ndarray): Grayscale frame used as baseline for motion detection.
-        motion_persistence_counter (int): Tracks frames remaining for motion persistence.
-        frame_update_counter (int): Tracks frames until reference frame update.
-        font_style (int): OpenCV font style for text overlay.
-        video_writer (cv2.VideoWriter): Object for writing video to file, None if not recording.
-        video_codec (int): FourCC code for video encoding (XVID).
-        recording (bool): Flag to enable/disable video recording.
-        announced_detected_motion (bool): Flag to track if motion detection has been announced.
+        sentry (Sentry): Optional rotating base object to pause/resume based on detected motion.
+        alarm (Alarm): Buzzer/alert component triggered on motion detection.
+        reference_frame (np.ndarray): Grayscale frame used for motion comparison.
+        motion_persistence_counter (int): Countdown timer to persist motion detection.
+        frame_update_counter (int): Frame counter for updating the reference frame.
+        font_style (int): OpenCV font style for display overlays.
+        video_writer (cv2.VideoWriter): Optional writer for saving detected motion footage.
+        video_codec (int): FOURCC encoding code (default: 'XVID').
+        recording (bool): Toggle to enable/disable video recording.
+        announced_detected_motion (bool): Internal flag to limit repeat alerts.
     """
+
 
     # Class-level constants for motion detection sensitivity and persistence
     FRAME_UPDATE_INTERVAL = 10  # Number of frames before updating the reference frame
@@ -73,7 +72,11 @@ class MotionDetector:
 
     def process_frame(self, frame):
         """
-        Process a raw video frame for motion detection and display/recording.
+        Prepare a video frame for motion analysis by flipping, resizing, grayscaling, and blurring.
+        Args:
+            frame (np.ndarray): Raw image from the camera in BGR format.
+        Returns:
+            Tuple[np.ndarray, np.ndarray]: Tuple of (processed grayscale frame, original resized frame).
         """
         frame = cv2.flip(frame, 1)  # Flip horizontally to correct orientation
         frame_resized = cv2.resize(frame, (640, 480))  # Resize to standard width
@@ -83,7 +86,12 @@ class MotionDetector:
 
     def detect_motion(self, reference_frame, current_frame):
         """
-        Detect motion by analyzing differences between a reference frame and the current frame.
+        Compare the current frame with a reference to detect motion based on contour area.
+        Args:
+            reference_frame (np.ndarray): A grayscale baseline frame.
+            current_frame (np.ndarray): The new grayscale frame to compare.
+        Returns:
+            List[np.ndarray]: A list of contours where significant movement was detected.
         """
         frame_difference = cv2.absdiff(reference_frame, current_frame)  # Calculate frame difference
         threshold_frame = cv2.threshold(frame_difference, 25, 255, cv2.THRESH_BINARY)[1]  # Binary threshold
@@ -92,8 +100,13 @@ class MotionDetector:
         return contours
 
     def run(self):
-        """
-        Run the main loop to capture video, detect motion, and record video when conditions are met.
+         """
+        Continuously capture video frames and detect motion.
+            - Detect movement using frame differencing.
+            - Display and annotate the frame using OpenCV (unless in headless mode).
+            - Pause/resume the sentry turret when motion is detected or ends.
+            - Optionally record motion-triggered video clips to disk.
+            - Monitor user input for quit ('q') or toggle recording ('r').
         """
         try:
             while True:
