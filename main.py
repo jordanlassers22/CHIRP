@@ -11,7 +11,7 @@ Modules:
 from MotionDetector import MotionDetector
 from sentryTurret import Sentry
 if __name__ == "__main__":
-    sentry = Sentry(left_pin=1, right_pin=7, wait_duration=3, rotations_before_switch=8,rotate_duration=.15)
+    sentry = Sentry(left_pin=1, right_pin=7, wait_duration=8, rotations_before_switch=3,rotate_duration=.15)
     try:
         # Initialize the motion detector and inject the sentry so it can pause/resume rotation
         detector = MotionDetector(sentry=sentry)

@@ -40,8 +40,9 @@ class MotionDetector:
 
     # Class-level constants for motion detection sensitivity and persistence
     FRAME_UPDATE_INTERVAL = 10  # Number of frames before updating the reference frame
-    MINIMUM_MOTION_AREA = 1000  # Minimum contour area to be considered motion
+    MINIMUM_MOTION_AREA = 3000  # Minimum contour area to be considered motion
     MOTION_PERSISTENCE_DURATION = 50  # Number of frames to persist motion before stopping recording
+    
 
     def __init__(self, sentry=None):
         """
@@ -101,14 +102,17 @@ class MotionDetector:
 
     def run(self):
         """
-    Continuously capture video frames and detect motion.
-    - Detect movement using frame differencing.
-    - Display and annotate the frame using OpenCV (unless in headless mode).
-    - Pause/resume the sentry turret when motion is detected or ends.
-    - Optionally record motion-triggered video clips to disk.
-    - Monitor user input for quit ('q') or toggle recording ('r').
+        Continuously capture video frames and detect motion.
+        - Detect movement using frame differencing.
+        - Display and annotate the frame using OpenCV (unless in headless mode).
+        - Pause/resume the sentry turret when motion is detected or ends.
+        - Optionally record motion-triggered video clips to disk.
+        - Monitor user input for quit ('q') or toggle recording ('r').
+        - Ignore motion detection during turret rotation and wait 3s after rotation stops.
         """
         try:
+            rotation_stopped_time = None  # Tracks when rotation stops
+            POST_ROTATION_DELAY = 1.0  # Delay in seconds after rotation stops
             while True:
                 motion_detected = False  # Reset motion flag each frame
                 frame = self.picam2.capture_array()  # Capture frame from Picamera2
@@ -121,45 +125,81 @@ class MotionDetector:
                 # Set initial reference frame if not yet defined
                 if self.reference_frame is None:
                     self.reference_frame = current_frame
+                    #print("Initialized reference frame")
 
-                # Update reference frame periodically
-                self.frame_update_counter += 1
-                if self.frame_update_counter > self.FRAME_UPDATE_INTERVAL:
-                    self.frame_update_counter = 0
-                    self.reference_frame = current_frame
+                # Skip motion detection if turret is rotating or in post-rotation delay
+                if self.sentry and self.sentry.isRotating:
+                    #print("Skipping motion detection: Turret is rotating")
+                    # Reset motion state to avoid false positives
+                    self.motion_persistence_counter = 0
+                    self.announced_detected_motion = False
+                    rotation_stopped_time = None  # Reset delay timer
+                    self.reference_frame = current_frame  # Update reference frame to current
+                else:
+                    # Check if rotation recently stopped
+                    if self.sentry and rotation_stopped_time is None and not self.sentry.isRotating:
+                        #print("Rotation stopped, starting 3s delay")
+                        rotation_stopped_time = time.time()
+                        self.reference_frame = current_frame  # Reset reference frame
+                        self.motion_persistence_counter = 0  # Clear any prior motion
+                        self.announced_detected_motion = False
 
-                # Detect motion and draw bounding boxes
-                motion_contours = self.detect_motion(self.reference_frame, current_frame)
-                for contour in motion_contours:
-                    if cv2.contourArea(contour) > self.MINIMUM_MOTION_AREA:  # Check if contour is significant
-                        motion_detected = True
-                        (x, y, width, height) = cv2.boundingRect(contour)  # Get bounding box coordinates
-                        cv2.rectangle(processed_frame, (x, y), (x + width, y + height), (0, 255, 0), 2)  # Draw rectangle
+                    # Only process motion if not in post-rotation delay
+                    if (rotation_stopped_time is None or time.time() - rotation_stopped_time >= POST_ROTATION_DELAY):
+                        if rotation_stopped_time is not None and time.time() - rotation_stopped_time < POST_ROTATION_DELAY + 0.1:
+                            self.reference_frame = current_frame
+                            #print("Reset reference frame after post-rotation delay")
 
-                # Announce new motion detection
-                if motion_detected and not self.announced_detected_motion:
-                    self.announced_detected_motion = True
-                    print("New Motion Detected")
-                    #self.alarm.sound_for(duration=2, repeats=1)
-                # Reset persistence counter on motion detection
-                if motion_detected:
-                    self.motion_persistence_counter = self.MOTION_PERSISTENCE_DURATION
-                
-                #Pause rotation when movement is detected
+                        # Update reference frame periodically, but only if not in delay
+                        self.frame_update_counter += 1
+                        if self.frame_update_counter > self.FRAME_UPDATE_INTERVAL:
+                            self.frame_update_counter = 0
+                            self.reference_frame = current_frame
+                            #print("Updated reference frame")
+
+                        # Detect motion and draw bounding boxes
+                        motion_contours = self.detect_motion(self.reference_frame, current_frame)
+                        for contour in motion_contours:
+                            area = cv2.contourArea(contour)
+                            if area > self.MINIMUM_MOTION_AREA:  # Check if contour is significant
+                                motion_detected = True
+                                print(f"Motion detected with contour area: {area}")
+                                (x, y, width, height) = cv2.boundingRect(contour)  # Get bounding box coordinates
+                                cv2.rectangle(processed_frame, (x, y), (x + width, y + height), (0, 255, 0), 2)  # Draw rectangle
+
+                        # Announce new motion detection
+                        if motion_detected and not self.announced_detected_motion:
+                            self.announced_detected_motion = True
+                            print("New Motion Detected (actual motion)")
+                            # self.alarm.sound_for(duration=2, repeats=1)
+
+                        # Reset persistence counter on motion detection
+                        if motion_detected:
+                            self.motion_persistence_counter = self.MOTION_PERSISTENCE_DURATION
+
+                    #else:
+                        #print(f"Skipping motion detection: In post-rotation delay ({time.time() - rotation_stopped_time:.2f}s remaining)")
+
+                # Pause rotation when movement is detected (only if not rotating)
                 if self.sentry:
-                    if self.motion_persistence_counter > 0 and not self.sentry._pause_event.is_set():
+                    if (self.motion_persistence_counter > 0 and 
+                        not self.sentry._pause_event.is_set() and 
+                        not self.sentry.isRotating):
                         self.sentry.pause_rotation()
-                    elif self.motion_persistence_counter == 0 and self.sentry._pause_event.is_set():
+                    elif (self.motion_persistence_counter == 0 and 
+                          self.sentry._pause_event.is_set()):
                         self.sentry.resume_rotation()
 
-
-                # Update status text based on motion and recording state
                 # Decrease persistence counter, ensuring it doesn't go below 0
                 self.motion_persistence_counter = max(0, self.motion_persistence_counter - 1)
 
                 if not HEADLESS:
                     # Update status text based on motion and recording state
-                    if self.motion_persistence_counter > 0:
+                    if self.sentry and self.sentry.isRotating:
+                        motion_status_text = "Rotating - Motion detection paused"
+                    elif rotation_stopped_time and time.time() - rotation_stopped_time < POST_ROTATION_DELAY:
+                        motion_status_text = f"Post-rotation delay - Motion detection paused"
+                    elif self.motion_persistence_counter > 0:
                         motion_status_text = f"Motion Detected ({self.motion_persistence_counter}) - Recording: {self.recording}"
                     else:
                         motion_status_text = f"No Motion Detected - Recording: {self.recording}"
@@ -170,8 +210,6 @@ class MotionDetector:
                         cv2.putText(processed_frame, "Rotating - Motion detection paused", (10, 70), self.font_style, 0.75, (0, 255, 255), 2, cv2.LINE_AA)
 
                     cv2.imshow("Motion Detection", processed_frame)
-
-
 
                 # Initialize video writer if motion persists and recording is enabled
                 if self.motion_persistence_counter > 0 and not self.video_writer and self.recording:
@@ -203,8 +241,7 @@ class MotionDetector:
                         self.recording = not self.recording
                         print(f"Recording set to: {self.recording}")
                 else:
-                    time.sleep(0.05)  # prevent 100% CPU usage
-
+                    time.sleep(0.05)  # Prevent 100% CPU usage
 
         finally:
             print("Releasing video capture...")
@@ -213,7 +250,7 @@ class MotionDetector:
             if self.video_writer:
                 print("Releasing video writer...")
                 self.video_writer.release()
-                self.video_writer = None  # <-- add this for safety
+                self.video_writer = None
 
             if not HEADLESS:
                 print("Closing all windows...")
