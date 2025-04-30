@@ -36,8 +36,8 @@ cd CHIRP
 ```bash
 sudo raspi-config
 ```
-Enable Camera Interface
-Enable I2C
+- Enable Camera Interface
+- Enable I2C
 
 3. **Install Dependencies**
 
@@ -49,12 +49,12 @@ pip3 install numpy RPi.GPIO picamera2
 
 ## Wiring Installation
 Refer to wiring_diagram.png for a full diagram. Basic GPIO usage:
-Camera: Connect to CSI port
-Alarm: GPIO 16
-Motor Control:
-Left: GPIO 1
-Right: GPIO 7
-Use transistors/relays if powering motors with an external source.
+- Camera: Connect to CSI port
+- Alarm: GPIO 16
+- Motor Control:
+- Left: GPIO 1
+- Right: GPIO 7
+- Use transistors/relays if powering motors with an external source.
 
 ## Running the Program
 From the project folder:
@@ -69,9 +69,8 @@ This will:
 - Record video if recording is toggled on
 
 ## Keyboard Controls
-r	Toggle recording mode
-
-q	Quit the program
+- r	Toggle recording mode
+- q	Quit the program
 
 Recordings are saved to the recordings/ directory.
 
