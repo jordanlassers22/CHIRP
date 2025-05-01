@@ -34,12 +34,16 @@ It uses a camera to detect motion, sounds an alarm when intruders are detected, 
 ## Project Structure
 ```
 /recordings/        # Saved video files
-MotorController.py  # Controls motor for rotating the camera
-RotatingStand.py    # Manages stand rotation logic
+main.py             # Main entry point for program
+sentryTurret.py  # Controls motor for rotating the camera
 MotionDetector.py   # Handles video capture, motion detection, alarm triggering
-requirements.md     # Project requirements document
-LICENSE             # License file (MIT License)
+alert_system.py     # Handles alarm triggering logic
 README.md           # This file
+USERGUIDE.md        # Installation Guide
+Requirements.md     # Project requirements document
+circuit.JPEG        # Wiring Diagram
+LICENSE             # License file (MIT License)
+
 ```
 
 ---
