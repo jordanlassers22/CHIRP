@@ -171,7 +171,7 @@ class MotionDetector:
                         if motion_detected and not self.announced_detected_motion:
                             self.announced_detected_motion = True
                             print("New Motion Detected (actual motion)")
-                            # self.alarm.sound_for(duration=2, repeats=1)
+                            self.alarm.sound_for(duration=1, repeats=1)
 
                         # Reset persistence counter on motion detection
                         if motion_detected:
