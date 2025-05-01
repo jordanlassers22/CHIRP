@@ -84,7 +84,6 @@ Here are some potential features to consider if contributing:
 
 ## Contributing Notes
 
-- .
 - Always call `.stop()` or `.cleanup()` to avoid GPIO resource issues.
 - Be cautious when modifying rotation timing — incorrect values may cause mechanical strain.
 - There is a 1 second period upon rotation completion where any detected motion is ignored to prevent false positives.
